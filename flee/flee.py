@@ -188,11 +188,8 @@ class Person:
             if outcome < movechance:
                 # If the agent does not have an existing route, then plan a new route.
                 if len(self.route) == 0:
-                    if system2_active and "_temp_route" in self.attributes:
-                        self.route = self.attributes["_temp_route"]
-                        del self.attributes["_temp_route"]
-                    else:
-                        self.route = moving.selectRoute(self, time=time)
+                    # Determine which route to take
+                    self.route = moving.selectRoute(self, time=time)
 
 
                 # Attempt to follow route. Return None if fail.  

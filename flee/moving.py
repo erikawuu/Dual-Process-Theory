@@ -325,7 +325,6 @@ def chooseFromWeights(weights, routes):
 
 @check_args_type
 def calculateMoveChance(a, ForceTownMove: bool, time) -> Tuple[float, bool]:
-
     """
     Summary:
         Calculates the probability that an agent will move this step.
@@ -336,18 +335,12 @@ def calculateMoveChance(a, ForceTownMove: bool, time) -> Tuple[float, bool]:
         time (int): Current time step.
 
     Returns:
-        movechance (int): Probability that agent will move this step. 
+        movechance (float): Probability that agent will move this step. 
+        system2_active (bool): Whether System 2 thinking is active.
     """
     system2_active = False
 
-    if a.location.town and ForceTownMove: # called through evolveMore
-        return 1.0
-    else: # called first time in loop
-        movechance = a.location.movechance
-        # Population-based scaling
-        movechance *= (float(max(a.location.pop, a.location.capacity)) / SimulationSettings.move_rules["MovechancePopBase"])**SimulationSettings.move_rules["MovechancePopScaleFactor"]
-
-        # --- System 2 Activation Logic ---
+    # --- System 2 Activation Logic ---
     conflict_triggered = a.location.conflict > 0.6
     in_recovery = a.location.time_of_conflict >= 0 and \
                   time >= a.location.time_of_conflict + 10
@@ -360,6 +353,17 @@ def calculateMoveChance(a, ForceTownMove: bool, time) -> Tuple[float, bool]:
             return 0.0, True  # suppress move if no viable route
         else:
             a.attributes["_temp_route"] = provisional_route
+        # For System 2, always return 1.0 (100% chance to initiate movement decision)
+        return 1.0, True
+
+    # If System 2 is not active, calculate standard System 1 move chance
+    if a.location.town and ForceTownMove:  # called through evolveMore
+        return 1.0, False
+    else:  # called first time in loop
+        movechance = a.location.movechance
+        # Population-based scaling
+        movechance *= (float(max(a.location.pop, a.location.capacity)) / SimulationSettings.move_rules["MovechancePopBase"])**SimulationSettings.move_rules["MovechancePopScaleFactor"]
+
 
     # DFlee Flood Location Movechance implementation:
     if SimulationSettings.move_rules["FloodRulesEnabled"] is True:
@@ -483,7 +487,7 @@ def pruneRoutes(weights, routes):
 
 
 @check_args_type
-def selectRoute(a, time: int, debug: bool = False, return_all_routes: bool = False):
+def selectRoute(a, time: int, debug: bool = False, return_all_routes: bool = False, system2_active: bool = False):
   """
   Summary:
       Selects a route for an agent to move to.
@@ -492,6 +496,8 @@ def selectRoute(a, time: int, debug: bool = False, return_all_routes: bool = Fal
     a: Agent
     time (int): Current time
     debug (bool, optional): Whether to print debug information. Defaults to False.
+    return_all_routes (bool, optional): Whether to return all routes. Defaults to False.
+    system2_active (bool, optional): Whether the agent's System 2 thinking is active. Defaults to False.
 
   Returns:
       int: Index of the chosen route
@@ -532,7 +538,20 @@ def selectRoute(a, time: int, debug: bool = False, return_all_routes: bool = Fal
       for i in range(0, len(routes)):
           routes[i] = routes[i][1:]
 
-      weights, routes = pruneRoutes(weights, routes)
+      # If System 2 is active, apply different route selection criteria
+      if system2_active:
+          # For System 2, we can implement more sophisticated route selection
+          # This could include prioritizing safety, or applying different weighting
+          weights, routes = pruneRoutes(weights, routes)
+          
+          # If there are no viable routes after System 2 evaluation, return empty list
+          if len(routes) == 0:
+              return []
+              
+          # Additional System 2 specific logic could go here
+      else:
+          # Standard System 1 pruning
+          weights, routes = pruneRoutes(weights, routes)
 
   route = chooseFromWeights(weights=weights, routes=routes)
 
