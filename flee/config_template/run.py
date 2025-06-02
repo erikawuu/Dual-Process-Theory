@@ -8,7 +8,6 @@ import sys
 
 from datetime import datetime, timedelta
 
-
 if __name__ == "__main__":
 
   start_date,end_time = read_period.read_sim_period("{}/sim_period.csv".format(sys.argv[1]))
