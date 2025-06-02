@@ -106,15 +106,6 @@ class Person:
         # Skip if location is None (for testing scenarios)
         if new_location is None:
             return
-        
-        # CRITICAL FIX: Check if this is a Link (agent is traveling)
-        # If agent is on a link, skip social connectivity updates
-        if hasattr(new_location, 'endpoint'):  # This means it's a Link object
-            return
-            
-        # Also check if it's not a Location object
-        if not hasattr(new_location, 'camp'):  # This means it's not a Location
-            return
             
         current_connections = self.attributes.get("connections", 0)
         
