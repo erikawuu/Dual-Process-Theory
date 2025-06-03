@@ -100,11 +100,16 @@ class Person:
         Update agent's social connectivity based on location and interactions.
         
         Args:
-            new_location: The location the agent is moving to or currently in
+            new_location: The location the agent is moving to or currently in (can be Location or Link)
             time: Current simulation time
         """
         # Skip if location is None (for testing scenarios)
         if new_location is None:
+            return
+        
+        # Skip social connectivity updates when traveling on links
+        # We only update when actually at locations
+        if hasattr(new_location, 'endpoint'):  # This means it's a Link object
             return
             
         current_connections = self.attributes.get("connections", 0)

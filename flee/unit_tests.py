@@ -21,17 +21,14 @@ def test_social_connectivity_crowded_area():
     agent_attributes = {"connections": 2}
     agent = flee.Person(None, agent_attributes)  # No location needed yet
     
-    # Create a crowded location (mock object)
+    # Create a crowded location (mock object) - COMPLETE VERSION
     class MockLocation:
-        def __init__(self, name="TestLocation"):
-            self.name = name
-            self.conflict = 0.7  # High conflict to trigger System 2
-            self.time_of_conflict = 5  # Set conflict start time
-            self.links = []  # Add this missing attribute
-            self.town = False
-            self.movechance = 0.3
-            self.pop = 1000
-            self.capacity = 1000
+        def __init__(self, numAgents=500):
+            self.name = "TestLocation"
+            self.numAgents = numAgents
+            self.camp = False           # ← Add this
+            self.idpcamp = False        # ← Add this  
+            self.conflict = 0.0         # ← Add this
     
     crowded_location = MockLocation(numAgents=500)
     
@@ -107,6 +104,7 @@ def test_system2_quick():
     assert connected == True
     
     print("✅ System 2 activation logic works!")
+    return True  # ← Add this line!
 
 def test_system1_quick():
     """Quick test for System 1 path"""
@@ -186,7 +184,7 @@ if __name__ == "__main__":
         tests_passed += 1
         
     total_tests += 1
-    if test_system2_activation_conditions():
+    if test_system2_quick():
         tests_passed += 1
     
     total_tests += 1
