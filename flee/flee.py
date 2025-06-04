@@ -108,7 +108,7 @@ class Person:
             return
         
         # Skip social connectivity updates when traveling on links
-        # We only update when actually at locations
+        # only update when actually at locations
         if hasattr(new_location, 'endpoint'):  # This means it's a Link object
             return
             

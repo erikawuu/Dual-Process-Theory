@@ -213,7 +213,7 @@ def add_initial_refugees(e, d, loc):
   for i in range(0, num_refugees):
       attributes = draw_samples(e, loc)
       attributes["connections"] = np.random.poisson(3)
-      e.insertAgent(location=loc, attributes=attributes) # Parallelization is incorporated *inside* the addAgent function.
+      e.insertAgent(location=loc, attributes=attributes) # Parallelization is incorporated in the addAgent function.
 
 
 @check_args_type
@@ -262,7 +262,7 @@ def spawn_daily_displaced(e, t, d):
         for j in range(0, num_spawned):
             attributes = draw_samples(e, e.locations[i])
             attributes["connections"] = np.random.poisson(3)
-            e.addAgent(location=e.locations[i], attributes=attributes) # Parallelization is incorporated *inside* the addAgent function.
+            e.addAgent(location=e.locations[i], attributes=attributes) # Parallelization is incorporated in the addAgent function.
 
         new_refs += num_spawned
 
@@ -290,7 +290,7 @@ def spawn_daily_displaced(e, t, d):
         for j in range(0, num_spawned):
             attributes = draw_samples(e, e.locations[i])
             attributes["connections"] = np.random.poisson(3)
-            e.addAgent(location=e.locations[i], attributes=attributes) # Parallelization is incorporated *inside* the addAgent function.
+            e.addAgent(location=e.locations[i], attributes=attributes) # Parallelization is incorporated in the addAgent function.
 
         new_refs += num_spawned
 
@@ -325,7 +325,7 @@ def spawn_daily_displaced(e, t, d):
       for i in range(0, new_refs):
         attributes = draw_samples(e, locs[i])
         attributes["connections"] = np.random.poisson(3)
-        e.addAgent(location=locs[i], attributes=attributes) # Parallelization is incorporated *inside* the addAgent function.
+        e.addAgent(location=locs[i], attributes=attributes) 
 
     return new_refs, __refugees_raw, __refugee_debt
 
@@ -347,5 +347,5 @@ def spawn_agents(e, number):
         loc = e.pick_spawn_location()
         attributes = draw_samples(e, loc)
         attributes["connections"] = np.random.poisson(3)
-        e.addAgent(location=loc, attributes=attributes) # Parallelization is incorporated *inside* the addAgent function.
+        e.addAgent(location=loc, attributes=attributes) 
 

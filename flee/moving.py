@@ -336,11 +336,11 @@ def calculateMoveChance(a, ForceTownMove: bool, time) -> Tuple[float, bool]:
 
     Returns:
         movechance (float): Probability that agent will move this step. 
-        system2_active (bool): Whether System 2 thinking is active.
+        system2_active: Whether System 2 thinking is active.
     """
     system2_active = False
 
-    # --- System 2 Activation Logic ---
+    # System 2 Activation Logic
     conflict_triggered = a.location.conflict > 0.6
     in_recovery = a.location.time_of_conflict >= 0 and \
                   time >= a.location.time_of_conflict + 10
@@ -362,16 +362,16 @@ def calculateMoveChance(a, ForceTownMove: bool, time) -> Tuple[float, bool]:
         return 1.0, True
 
     # If System 2 is not active, calculate standard System 1 move chance
-    if a.location.town and ForceTownMove:  # called through evolveMore
+    if a.location.town and ForceTownMove:  # called through evolve
         return 1.0, False
     else:  # called first time in loop
         movechance = a.location.movechance
-        # Population-based scaling
+
         movechance *= (float(max(a.location.pop, a.location.capacity)) / SimulationSettings.move_rules["MovechancePopBase"])**SimulationSettings.move_rules["MovechancePopScaleFactor"]
 
-    # ... rest of your flood logic remains the same ...
+    # flood
 
-    return movechance, False  # System 2 not active for System 1 decisions
+    return movechance, False 
 
 
 def check_routes(weights, routes, label):
