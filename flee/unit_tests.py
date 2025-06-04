@@ -14,7 +14,6 @@ def test_social_connectivity_crowded_area():
     """Unit test: Social connectivity increases in crowded areas"""
     print("Testing: Social connectivity in crowded areas")
     
-    # Create minimal test objects (no full simulation needed)
     flee.SimulationSettings.ReadFromYML("test_settings.yml")
     
     # Create a simple agent
@@ -39,10 +38,10 @@ def test_social_connectivity_crowded_area():
     
     # Check result
     if final_connections > initial_connections:
-        print("✅ PASS: Connections increased from", initial_connections, "to", final_connections)
+        print("PASS: Connections increased from", initial_connections, "to", final_connections)
         return True
     else:
-        print("❌ FAIL: Connections should increase in crowded areas")
+        print("FAIL: Connections should increase in crowded areas")
         return False
 
 def test_social_connectivity_isolated_area():
@@ -68,14 +67,14 @@ def test_social_connectivity_isolated_area():
     final_connections = agent.attributes["connections"]
     
     if final_connections < initial_connections:
-        print("✅ PASS: Connections decreased from", initial_connections, "to", final_connections)
+        print("PASS: Connections decreased from", initial_connections, "to", final_connections)
         return True
     else:
-        print("❌ FAIL: Connections should decrease in isolated areas")
+        print("FAIL: Connections should decrease in isolated areas")
         return False
 
 def test_system2_quick():
-    """Quick test - just verify the logic paths work"""
+    """verify the logic paths work"""
     
     # Mock agent with minimal attributes
     class QuickMockAgent:
@@ -103,7 +102,7 @@ def test_system2_quick():
     assert in_recovery == True  
     assert connected == True
     
-    print("✅ System 2 activation logic works!")
+    print("System 2 activation logic works!")
     return True  # ← Add this line!
 
 def test_system1_quick():
@@ -132,7 +131,7 @@ def test_system1_quick():
     assert conflict_triggered == False  # Should use System 1
     assert connected == False
     
-    print("✅ System 1 path works!")
+    print("System 1 path works!")
 
 # Run these quick tests
 test_system2_quick()
@@ -151,7 +150,7 @@ def test_days_in_location_tracking():
     
     # Test initial state
     if agent.days_in_current_location != 0:
-        print("❌ FAIL: Days should start at 0")
+        print("FAIL: Days should start at 0")
         return False
     
     # Mock the evolve increment (without full simulation)
@@ -159,10 +158,10 @@ def test_days_in_location_tracking():
     agent.days_in_current_location += 1  # Simulate what evolve() does
     
     if agent.days_in_current_location == 1:
-        print("✅ PASS: Days in location incremented correctly")
+        print("PASS: Days in location incremented correctly")
         return True
     else:
-        print("❌ FAIL: Days tracking not working")
+        print("FAIL: Days tracking not working")
         return False
 
         
@@ -195,6 +194,6 @@ if __name__ == "__main__":
     print(f"Tests passed: {tests_passed}/{total_tests}")
     
     if tests_passed == total_tests:
-        print("🎉 All unit tests passed!")
+        print("All unit tests passed!")
     else:
-        print("⚠️  Some tests failed - check your implementation")
+        print("Some tests failed :(")
